@@ -16,7 +16,8 @@ int mana=4;
 int op2=0;
 int ataqBoss;
 int x=0;
-int ataque;
+int ataqueBoss;
+int mostrar=0;
 
 
 // Cores
@@ -70,7 +71,7 @@ void DrawHudActions (int op) {
     DrawText("Defesa", xAcoesHud+300, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); //2
     DrawText("Ações" , xAcoesHud+600, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); //3
         break;
-    case 1: // Ataques
+    case 1: // ataqueBosss
     DrawText("Espadada",     xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); 
     DrawText("Bola de fogo", xAcoesHud+340, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); 
     DrawText("Hackear" ,     xAcoesHud+690, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); 
@@ -242,7 +243,7 @@ int main() {
         if (desenharBoss1) {
             DrawBoss1(bg1, richas, chay); // Desenha o Boss
 
-            // Ataques do Boss
+            // ataqueBosss do Boss
             if(seuTurno==false){
                 ataqBoss=rand()%3;
                 if(x<=2){
@@ -250,18 +251,18 @@ int main() {
                     if(x==1){
                         switch (ataqBoss)
                         {
-                            case 0: // Ataque Padrão
-                            ataque=5+rand()%11;
-                            vida-=ataque;
+                            case 0: // ataqueBoss Padrão
+                            ataqueBoss=5+rand()%11;
+                            vida-=ataqueBoss;
                                 break;
 
-                            case 1: // Ataque Empoderado
-                            ataque=10+rand()%11;
-                            vida-=ataque;
+                            case 1: // ataqueBoss Empoderado
+                            ataqueBoss=10+rand()%11;
+                            vida-=ataqueBoss;
                                 break;
                             
                             case 2: // HEAL
-                            vidaBoss[0]+=10+rand()%11;
+                            vidaBoss[0]+=rand()%11;
                                 break;
 
                             default:
@@ -270,8 +271,12 @@ int main() {
                     }
                 }
 
-                
-                if(IsKeyPressed(KEY_ENTER) && !enterPressionado){
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==0){
+                mostrar=1;
+                enterPressionado = true; // Marca que Enter foi pressionado
+                }   
+
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){
                 seuTurno=true;
                 enterPressionado = true; // Marca que Enter foi pressionado
                 }   
@@ -294,11 +299,20 @@ int main() {
 
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
-                ataque=0;
+                mostrar=0;
+                ataqueBoss=0;
             }
 
             if(seuTurno==false){
-                DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataque), 250, 590, 40, YELLOW);
+                if(mostrar==0){
+                    DrawText(TextFormat("O seu ataque deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW);
+                    DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
+                }else
+                if(mostrar==1){
+                    DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW);
+                    DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
+                }
+                
             }
         
             // CONTROLE DAS AÇÕES---------------------------------------------------------------------------------------    
@@ -321,7 +335,7 @@ int main() {
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
 
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // Ataques
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // ataqueBosss
                 PlaySound(select);
                 switch (op)
                 {
@@ -367,7 +381,7 @@ int main() {
 
         // Desenha o número da opção atual para depuração (op)
         DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);
-        DrawText(TextFormat("atk: %d", ataque), 100, 200, 40, BLUE);
+        DrawText(TextFormat("atk: %d", ataqueBoss), 100, 200, 40, BLUE);
 
         // Fechar desenho
         EndDrawing();
