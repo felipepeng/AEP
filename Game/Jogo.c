@@ -17,6 +17,7 @@ int op2=0;
 int ataqBoss;
 int x=0;
 int ataqueBoss;
+int seuAtaque=0;
 int mostrar=0;
 
 
@@ -279,6 +280,7 @@ int main() {
                 if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){
                 seuTurno=true;
                 enterPressionado = true; // Marca que Enter foi pressionado
+                seuAtaque=0;
                 }   
             }
         }
@@ -304,11 +306,11 @@ int main() {
             }
 
             if(seuTurno==false){
-                if(mostrar==0){
-                    DrawText(TextFormat("O seu ataque deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW);
+                if(mostrar==0){   // Seu Ataque
+                    DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 280, 590, 40, YELLOW);
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }else
-                if(mostrar==1){
+                if(mostrar==1){   // Ataque do Boss
                     DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW);
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
@@ -340,19 +342,19 @@ int main() {
                 switch (op)
                 {
                 case 1: // Espadada 
-                    vidaBoss[0]-=5 + rand()%11;
+                    seuAtaque= 5 + rand()%11;
                     seuTurno=false;
                     break;
                 case 2: // Bola de fogo
                     if(mana>=1){
-                        vidaBoss[0]-=8 + rand()%11;
+                        seuAtaque= 8 + rand()%11;
                         mana-=1;
                         seuTurno=false; 
                     } 
                     break;
                 case 3: // Hackear
                     if(mana>=2){
-                        vidaBoss[0]-=8 + rand()%18;
+                        seuAtaque= 8 + rand()%18;
                         mana-=2;
                         seuTurno=false;
                     } 
@@ -360,6 +362,7 @@ int main() {
                 default:
                     break;
                 }
+                vidaBoss[0]-=seuAtaque;
                 x=0;
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
@@ -381,7 +384,7 @@ int main() {
 
         // Desenha o número da opção atual para depuração (op)
         DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);
-        DrawText(TextFormat("atk: %d", ataqueBoss), 100, 200, 40, BLUE);
+        DrawText(TextFormat("atka: %d", seuAtaque), 100, 200, 40, BLUE);
 
         // Fechar desenho
         EndDrawing();
