@@ -16,6 +16,7 @@ int mana=4;
 int op2=0;
 int ataqBoss;
 int x=0;
+int ataque;
 
 
 // Cores
@@ -250,14 +251,16 @@ int main() {
                         switch (ataqBoss)
                         {
                             case 0: // Ataque Padrão
-                            vida-=5+rand()%11;
+                            ataque=5+rand()%11;
+                            vida-=ataque;
                                 break;
 
                             case 1: // Ataque Empoderado
-                            vida-=10+rand()%11;
+                            ataque=10+rand()%11;
+                            vida-=ataque;
                                 break;
                             
-                            case 2: // Ataque Empoderado
+                            case 2: // HEAL
                             vidaBoss[0]+=10+rand()%11;
                                 break;
 
@@ -268,13 +271,10 @@ int main() {
                 }
 
                 
-                
                 if(IsKeyPressed(KEY_ENTER) && !enterPressionado){
                 seuTurno=true;
                 enterPressionado = true; // Marca que Enter foi pressionado
-                }
-
-                
+                }   
             }
         }
 
@@ -294,6 +294,11 @@ int main() {
 
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
+                ataque=0;
+            }
+
+            if(seuTurno==false){
+                DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataque), 250, 590, 40, YELLOW);
             }
         
             // CONTROLE DAS AÇÕES---------------------------------------------------------------------------------------    
@@ -361,7 +366,8 @@ int main() {
         }
 
         // Desenha o número da opção atual para depuração (op)
-        DrawText(TextFormat("%d", op), 100, 100, 40, BLUE);
+        DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);
+        DrawText(TextFormat("atk: %d", ataque), 100, 200, 40, BLUE);
 
         // Fechar desenho
         EndDrawing();
