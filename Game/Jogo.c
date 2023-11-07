@@ -250,6 +250,7 @@ int main() {
                 if(x<=2){
                     x++;
                     if(x==1){
+                        mana+=1;
                         switch (ataqBoss)
                         {
                             case 0: // ataqueBoss Padrão
