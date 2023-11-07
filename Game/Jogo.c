@@ -90,6 +90,25 @@ void DrawHudActions (int op) {
     default:
         break;
     } 
+    
+    if(op2==1){
+        switch(op){
+        case 1:
+        DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
+        DrawText("Ataca com a espada causando 5-20 de dano.", 400, 690, 20, LIGHTGRAY);
+            break;
+        case 2:
+        DrawText("Custo de Mana: 1", 15, 690, 20, LIGHTGRAY);
+        DrawText("Atira uma bola flamejante causando 8-25 de dano.", 400, 690, 20, LIGHTGRAY);
+            break;
+        case 3:
+        DrawText("Custo de Mana: 2", 15, 690, 20, LIGHTGRAY);
+        DrawText("Hackeia o inimigo causando 12-30 de dano.", 420, 690, 20, LIGHTGRAY);
+            break;
+        
+        }
+    }
+        
 }
 
 
@@ -121,7 +140,6 @@ int main() {
 
     bool enterPressionado = false; // Computar apenas uma vez o Enter
 
-    bool continuar = false; // Após turno Boss
     bool seuTurno = false; // Seu turno
     // Varíaveis controladoras de tela
     bool desenharMenu = true;  // Menu
@@ -342,26 +360,24 @@ int main() {
                 switch (op)
                 {
                 case 1: // Espadada 
-                    seuAtaque= 5 + rand()%11;
-                    seuTurno=false;
+                    seuAtaque= 5 + rand()%16;  //(5-20)
                     break;
                 case 2: // Bola de fogo
                     if(mana>=1){
-                        seuAtaque= 8 + rand()%11;
+                        seuAtaque= 8 + rand()%18;  //(8-25)
                         mana-=1;
-                        seuTurno=false; 
                     } 
                     break;
                 case 3: // Hackear
                     if(mana>=2){
-                        seuAtaque= 8 + rand()%18;
+                        seuAtaque= 12 + rand()%19;  //(12-30)
                         mana-=2;
-                        seuTurno=false;
                     } 
                     break;
                 default:
                     break;
                 }
+                seuTurno=false;
                 vidaBoss[0]-=seuAtaque;
                 x=0;
                 enterPressionado = true; // Marca que Enter foi pressionado
