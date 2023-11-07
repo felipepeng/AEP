@@ -89,6 +89,7 @@ void DrawHudActions (int op) {
     DrawText("Ataque", xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); //1
     DrawText("Defesa", xAcoesHud+300, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); //2
     DrawText("Ações" , xAcoesHud+600, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); //3
+    DrawText("Fugir" , xAcoesHud+900, 590, FONT_SIZE, (op == 4) ? YELLOW : padrao); //4
         break;
     case 1: // ataqueBosss
     DrawText("Espadada",     xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); 
@@ -166,7 +167,7 @@ int main() {
         // Tocar música
         UpdateMusicStream(music);
 
-        // Controles do menu
+        // Controles do menu (OP)
         if(desenharMenu || desenharBosses){  // Menu e Bosses
             if (IsKeyPressed(KEY_UP)) {
             op -= 1;
@@ -186,9 +187,16 @@ int main() {
                 PlaySound(select);
             }
         }
-        // Controle de limite
-        if (op < 1) op = 3;
-        if (op > 3) op = 1;  
+        // Controle de limite (OP)
+        if(op2==0 && desenharBoss1){   // Add Boss2 e Boss3
+            if (op < 1) op = 4;
+            if (op > 4) op = 1; 
+        }
+        else{
+            if (op < 1) op = 3;
+            if (op > 3) op = 1; 
+        }
+         
 
 //--------- Testes 
             if(IsKeyPressed(KEY_FOUR)) vida-=25;
@@ -244,15 +252,7 @@ int main() {
             }
         }  
 
-        if (desenharBoss1 && op2==0) {
-            if (IsKeyPressed(KEY_BACKSPACE)) { // Voltar a tela
-                desenharBoss1 = false; // Sai da Boss Fight 1
-                desenharBosses = true; // Volta a seleção de Bosses
-                PlaySound(select);
-                op=1;
-            }
-        }
-        
+       
         
     // Abrir desenho=================================================================================================
         BeginDrawing();
@@ -267,13 +267,13 @@ int main() {
         if(desenharInstrucoes){
             DrawInstrucoes(op);
         }
-        // Bosses
+        // Seleção de Bosses
         if (desenharBosses) {
          DrawBosses(op);
         }
         // Boss 1
         if (desenharBoss1) {
-            DrawBoss1(bg1, richas, chay); // Desenha o Boss
+            DrawBoss1(bg1, richas, chay); // Desenha o Boss 1
 
             // ataqueBosss do Boss 1
             if(seuTurno==false){
@@ -344,8 +344,8 @@ int main() {
                 }else
                 if(mostrar==2){   // Sua Defesa
                     if(defesaPerfeita){
-                        DrawText(TextFormat("Você Defendeu %d do dano do ataque.", ataqueBoss), 180, 590, 40, YELLOW);
-                    }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 180, 590, 40, YELLOW));
+                        DrawText(TextFormat("Você Defendeu %d de dano do ataque.", ataqueBoss), 190, 590, 40, YELLOW);
+                    }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 190, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
                 
@@ -389,6 +389,11 @@ int main() {
                     break;
                 case 3:
                     op2=3;
+                    break;
+                case 4:   //=========================================================================dasldasdsadsadasdsa
+                    desenharBoss1 = false; // Sai da Boss Fight 1
+                    desenharBosses = true; // Volta a seleção de Bosses
+                    op=1;
                     break;
                 default:
                     break;
