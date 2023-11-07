@@ -21,6 +21,11 @@ int curaBoss;
 int seuAtaque=0;
 int mostrar=0;
 
+int suaDefesa=0;
+int nDefesa=0;
+bool defesaNormal=false;
+bool defesaPerfeita=false;
+
 // Adicionar elementos8
 Music music;
 Sound select;
@@ -41,7 +46,7 @@ void DrawMenu(int op, Texture2D bgMenu) {
     DrawTextureEx(CubePeng, (Vector2){730, 220}, 0, 1.0f, RAYWHITE);
   //DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
     DrawText("Início"    , 215, 243, FONT_SIZE, (op == 1) ? selecionado : BLACK);
-    DrawText("Instruções", 180, 345, FONT_SIZE, (op == 2) ? selecionado : BLACK);
+    DrawText("Instruções", 173, 345, FONT_SIZE, (op == 2) ? selecionado : BLACK);
     DrawText("Sair"      , 220, 452, FONT_SIZE, (op == 3) ? selecionado : BLACK);
 }
 
@@ -281,12 +286,10 @@ int main() {
                         {
                             case 0: // ataqueBoss Padrão
                             ataqueBoss= 5+rand()%11;
-                            vida-=ataqueBoss;
                                 break;
 
                             case 1: // ataqueBoss Empoderado
                             ataqueBoss= 10+rand()%11;
-                            vida-=ataqueBoss;
                                 break;
                             
                             case 2: // HEAL
@@ -297,19 +300,14 @@ int main() {
                             default:
                                 break;
                         }
+                        
+                        if(!defesaPerfeita && ataqBoss!=2){
+                            if(ataqueBoss>=suaDefesa){
+                                vida-=ataqueBoss -suaDefesa;        
+                            } else (suaDefesa=ataqueBoss);
+                        }
                     }
                 }
-
-                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==0){   // Seu Ataque
-                mostrar=1;
-                enterPressionado = true; // Marca que Enter foi pressionado
-                }   
-
-                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){   // Ataque do Boss
-                seuTurno=true;
-                enterPressionado = true; // Marca que Enter foi pressionado
-                seuAtaque=0;
-                }   
             }
         }
 
@@ -332,7 +330,7 @@ int main() {
                 mostrar=0;
                 ataqueBoss=0;
             }
-            // Sinaliza ações
+         // Sinaliza ações ****
             if(seuTurno==false){
                 if(mostrar==0){   // Seu Ataque
                     DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 280, 590, 40, YELLOW);
@@ -343,8 +341,39 @@ int main() {
                         DrawText(TextFormat("O Boss curou %d de vida.", curaBoss), 280, 590, 40, YELLOW);
                     } else(DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
+                }else
+                if(mostrar==2){
+                    if(defesaPerfeita){
+                        DrawText("Você Defendeu 100% do dano do ataque.", 180, 590, 40, YELLOW);
+                    }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 180, 590, 40, YELLOW));
+                    DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
                 
+                //Controle de Telas
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==0){   // Seu Ataque
+                    mostrar=1;
+                    enterPressionado = true; // Marca que Enter foi pressionado
+                }
+                    
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){   // Ataque do Boss
+                    if(defesaPerfeita || suaDefesa>0){
+                        mostrar=2;
+                    }else{
+                        seuAtaque=0;
+                        defesaPerfeita=false;
+                        suaDefesa=0;
+                        seuTurno=true;
+                    }
+                    enterPressionado = true; // Marca que Enter foi pressionado
+                }   
+                
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==2){   // Ataque do Boss
+                    seuAtaque=0;
+                    defesaPerfeita=false;
+                    suaDefesa=0;
+                    enterPressionado = true; // Marca que Enter foi pressionado
+                    seuTurno=true;
+                }   
             }
         
             // CONTROLE DAS AÇÕES---------------------------------------------------------------------------------------    
@@ -367,30 +396,54 @@ int main() {
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
 
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // ataqueBosss
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // Ataques
                 PlaySound(select);
                 switch (op)
                 {
                 case 1: // Espadada 
                     seuAtaque= 5 + rand()%16;  //(5-20)
+                    seuTurno=false;
                     break;
                 case 2: // Bola de fogo
                     if(mana>=1){
                         seuAtaque= 8 + rand()%18;  //(8-25)
                         mana-=1;
+                        seuTurno=false;
                     } 
                     break;
                 case 3: // Hackear
                     if(mana>=2){
                         seuAtaque= 12 + rand()%19;  //(12-30)
                         mana-=2;
+                        seuTurno=false;
+                    } 
+                    break;
+                default:
+                    break;
+                }
+                vidaBoss[0]-=seuAtaque;
+                x=0;
+                enterPressionado = true; // Marca que Enter foi pressionado
+            }
+            
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==2){  // Defesas ==================================================================
+                PlaySound(select);
+                switch (op)
+                {
+                case 1: // Defesa Normal 
+                    suaDefesa=5+ rand()%6;  
+                    break;
+                case 2: // Defesa Perfeita
+                    if(mana>=1){
+                        defesaPerfeita=true;  
+                        mana-=1;
                     } 
                     break;
                 default:
                     break;
                 }
                 seuTurno=false;
-                vidaBoss[0]-=seuAtaque;
+                nDefesa=suaDefesa;
                 x=0;
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
