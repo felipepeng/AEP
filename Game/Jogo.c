@@ -21,6 +21,15 @@ int curaBoss;
 int seuAtaque=0;
 int mostrar=0;
 
+// Adicionar elementos8
+Music music;
+Sound select;
+Texture2D bgMenu;
+Texture2D bg1;
+Texture2D richas;
+Texture2D chay;
+Texture2D CubePeng;
+Texture2D MatrixPeng;
 
 // Cores
 Color selecionado = MAROON;
@@ -29,6 +38,8 @@ Color padrao = WHITE;
 // Função para desenhar o Menu
 void DrawMenu(int op, Texture2D bgMenu) {
     DrawTexture(bgMenu, 0, 0 , RAYWHITE);
+    DrawTextureEx(CubePeng, (Vector2){730, 220}, 0, 1.0f, RAYWHITE);
+  //DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
     DrawText("Início"    , 215, 243, FONT_SIZE, (op == 1) ? selecionado : BLACK);
     DrawText("Instruções", 180, 345, FONT_SIZE, (op == 2) ? selecionado : BLACK);
     DrawText("Sair"      , 220, 452, FONT_SIZE, (op == 3) ? selecionado : BLACK);
@@ -120,15 +131,6 @@ int main() {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Joguinho Show");
     InitAudioDevice();
 
-    // Adicionar elementos
-    Music music;
-    Sound select;
-    Texture2D bgMenu;
-    Texture2D bg1;
-    Texture2D richas;
-    Texture2D chay;
-    
-
     // Carregar elementos
     music = LoadMusicStream("./music.mp3");
     select = LoadSound("./click.wav");
@@ -136,6 +138,8 @@ int main() {
     bg1 = LoadTexture("./Imagens/Mine3.png");
     richas = LoadTexture("./Imagens/Richas2.png");
     chay = LoadTexture("./Imagens/Chay.png");
+    CubePeng = LoadTexture("./Imagens/CubePeng.png");
+    MatrixPeng = LoadTexture("./Imagens/PengMatrix.png");
 
     // Tocar música
     PlayMusicStream(music);
