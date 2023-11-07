@@ -1,2 +1,2 @@
 # AEP
-Jogo feito inteiramente em C sem utilizar uma Game Engine 
+Jogo feito inteiramente em C, sem a utilização de uma Game Engine 
