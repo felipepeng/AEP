@@ -327,24 +327,24 @@ int main() {
 
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
-                mostrar=0;
+              //
                 ataqueBoss=0;
             }
          // Sinaliza ações ****
             if(seuTurno==false){
                 if(mostrar==0){   // Seu Ataque
-                    DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 280, 590, 40, YELLOW);
+                    DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 300, 590, 40, YELLOW);
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }else
                 if(mostrar==1){   // Ataque do Boss
                     if(ataqBoss==2){
-                        DrawText(TextFormat("O Boss curou %d de vida.", curaBoss), 280, 590, 40, YELLOW);
+                        DrawText(TextFormat("O Boss curou %d de vida.", curaBoss), 370, 590, 40, YELLOW);
                     } else(DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }else
                 if(mostrar==2){
                     if(defesaPerfeita){
-                        DrawText("Você Defendeu 100% do dano do ataque.", 180, 590, 40, YELLOW);
+                        DrawText(TextFormat("Você Defendeu %d do dano do ataque.", ataqueBoss), 180, 590, 40, YELLOW);
                     }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 180, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
@@ -421,6 +421,7 @@ int main() {
                 default:
                     break;
                 }
+                mostrar=0;
                 vidaBoss[0]-=seuAtaque;
                 x=0;
                 enterPressionado = true; // Marca que Enter foi pressionado
@@ -431,18 +432,20 @@ int main() {
                 switch (op)
                 {
                 case 1: // Defesa Normal 
-                    suaDefesa=5+ rand()%6;  
+                    suaDefesa=5+ rand()%6;
+                    seuTurno=false;                    
                     break;
                 case 2: // Defesa Perfeita
                     if(mana>=1){
                         defesaPerfeita=true;  
                         mana-=1;
+                        seuTurno=false;
                     } 
                     break;
                 default:
                     break;
                 }
-                seuTurno=false;
+                mostrar=1;
                 nDefesa=suaDefesa;
                 x=0;
                 enterPressionado = true; // Marca que Enter foi pressionado
