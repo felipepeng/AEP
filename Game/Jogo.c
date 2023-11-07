@@ -17,6 +17,7 @@ int op2=0;
 int ataqBoss;
 int x=0;
 int ataqueBoss;
+int curaBoss;
 int seuAtaque=0;
 int mostrar=0;
 
@@ -91,21 +92,21 @@ void DrawHudActions (int op) {
         break;
     } 
     
-    if(op2==1){
+    // Descrições
+    if(op2==1){ // Ataques
         switch(op){
-        case 1:
+        case 1: //Espadada
         DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
         DrawText("Ataca com a espada causando 5-20 de dano.", 400, 690, 20, LIGHTGRAY);
             break;
-        case 2:
+        case 2: //Bola de Fogo
         DrawText("Custo de Mana: 1", 15, 690, 20, LIGHTGRAY);
         DrawText("Atira uma bola flamejante causando 8-25 de dano.", 400, 690, 20, LIGHTGRAY);
             break;
-        case 3:
+        case 3: //Hackear
         DrawText("Custo de Mana: 2", 15, 690, 20, LIGHTGRAY);
         DrawText("Hackeia o inimigo causando 12-30 de dano.", 420, 690, 20, LIGHTGRAY);
             break;
-        
         }
     }
         
@@ -263,25 +264,26 @@ int main() {
 
             // ataqueBosss do Boss
             if(seuTurno==false){
-                ataqBoss=rand()%3;
                 if(x<=2){
                     x++;
                     if(x==1){
+                        ataqBoss=rand()%3;
                         mana+=1;
                         switch (ataqBoss)
                         {
                             case 0: // ataqueBoss Padrão
-                            ataqueBoss=5+rand()%11;
+                            ataqueBoss= 5+rand()%11;
                             vida-=ataqueBoss;
                                 break;
 
                             case 1: // ataqueBoss Empoderado
-                            ataqueBoss=10+rand()%11;
+                            ataqueBoss= 10+rand()%11;
                             vida-=ataqueBoss;
                                 break;
                             
                             case 2: // HEAL
-                            vidaBoss[0]+=rand()%11;
+                            curaBoss= 1+rand()%10;
+                            vidaBoss[0]+=curaBoss;
                                 break;
 
                             default:
@@ -322,14 +324,16 @@ int main() {
                 mostrar=0;
                 ataqueBoss=0;
             }
-
+            // Sinaliza ações
             if(seuTurno==false){
                 if(mostrar==0){   // Seu Ataque
                     DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 280, 590, 40, YELLOW);
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }else
                 if(mostrar==1){   // Ataque do Boss
-                    DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW);
+                    if(ataqBoss==2){
+                        DrawText(TextFormat("O Boss curou %d de vida.", curaBoss), 280, 590, 40, YELLOW);
+                    } else(DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
                 
@@ -398,9 +402,9 @@ int main() {
             enterPressionado = false;
         }
 
-        // Desenha o número da opção atual para depuração (op)
-        DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);
-        DrawText(TextFormat("atka: %d", seuAtaque), 100, 200, 40, BLUE);
+      // Desenha o número da opção atual para depuração (op)
+        //DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);  ***
+        //DrawText(TextFormat("atka: %d", seuAtaque), 100, 200, 40, BLUE);  ***
 
         // Fechar desenho
         EndDrawing();
