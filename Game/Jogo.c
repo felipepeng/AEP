@@ -23,7 +23,6 @@ int mostrar=0;
 
 int suaDefesa=0;
 int nDefesa=0;
-bool defesaNormal=false;
 bool defesaPerfeita=false;
 
 // Adicionar elementos8
@@ -124,6 +123,40 @@ void DrawHudActions (int op) {
         case 3: //Hackear
         DrawText("Custo de Mana: 2", 15, 690, 20, LIGHTGRAY);
         DrawText("Hackeia o inimigo causando 12-30 de dano.", 420, 690, 20, LIGHTGRAY);
+            break;
+        }
+    }
+    
+    if(op2==2){ // Defesas
+        switch(op){
+        case 1: //Defesa Simples
+        DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
+        DrawText("Defende 5-20 de dano do próximo ataque.", 400, 690, 20, LIGHTGRAY);
+            break;
+        case 2: //Defesa Perfeita
+        DrawText("Custo de Mana: 1", 15, 690, 20, LIGHTGRAY);
+        DrawText("Defende 100% de dano do próximo ataque.", 400, 690, 20, LIGHTGRAY);
+            break;
+        case 3: //???????????????
+        DrawText("Custo de Mana: ?", 15, 690, 20, LIGHTGRAY);
+        DrawText("????????????????????????????????????????????????", 300, 690, 20, LIGHTGRAY);
+            break;
+        }
+    }
+    
+    if(op2==3){ // Ações
+        switch(op){
+        case 1: //Meditar
+        DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
+        DrawText("Restaura +2 de Mana.", 400, 690, 20, LIGHTGRAY);
+            break;
+        case 2: //???????????????
+        DrawText("Custo de Mana: ?", 15, 690, 20, LIGHTGRAY);
+        DrawText("????????????????????????????????????????????????", 300, 690, 20, LIGHTGRAY);
+            break;
+        case 3: //???????????????
+        DrawText("Custo de Mana: ?", 15, 690, 20, LIGHTGRAY);
+        DrawText("????????????????????????????????????????????????", 300, 690, 20, LIGHTGRAY);
             break;
         }
     }
@@ -382,15 +415,15 @@ int main() {
                 switch (op)
                 {
                 case 1:
-                    op2=1; 
+                    op2=1;  //Ataques 
                     break;
                 case 2:
-                    op2=2;
+                    op2=2;  //Defesas
                     break;
                 case 3:
-                    op2=3;
+                    op2=3;  //Ações
                     break;
-                case 4:   //=========================================================================dasldasdsadsadasdsa
+                case 4:     //Correr
                     desenharBoss1 = false; // Sai da Boss Fight 1
                     desenharBosses = true; // Volta a seleção de Bosses
                     op=1;
@@ -437,7 +470,7 @@ int main() {
                 switch (op)
                 {
                 case 1: // Defesa Normal 
-                    suaDefesa=5+ rand()%6;
+                    suaDefesa=5+ rand()%16;
                     seuTurno=false;                    
                     break;
                 case 2: // Defesa Perfeita
