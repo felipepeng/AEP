@@ -188,7 +188,7 @@ int main() {
         }
         // Controle de limite
         if (op < 1) op = 3;
-            if (op > 3) op = 1;  
+        if (op > 3) op = 1;  
 
 //--------- Testes 
             if(IsKeyPressed(KEY_FOUR)) vida-=25;
@@ -275,7 +275,7 @@ int main() {
         if (desenharBoss1) {
             DrawBoss1(bg1, richas, chay); // Desenha o Boss
 
-            // ataqueBosss do Boss
+            // ataqueBosss do Boss 1
             if(seuTurno==false){
                 if(x<=2){
                     x++;
@@ -327,10 +327,10 @@ int main() {
 
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
-              //
-                ataqueBoss=0;
+                ataqueBoss=0;   // Reseta o dano de ataque do Boss
             }
-         // Sinaliza ações ****
+            
+            // Sinaliza ações ****  (Talvez trocar este+Controle de Telas para o Boss1)
             if(seuTurno==false){
                 if(mostrar==0){   // Seu Ataque
                     DrawText(TextFormat("O seu ataque deu %d de dano.", seuAtaque), 300, 590, 40, YELLOW);
@@ -342,7 +342,7 @@ int main() {
                     } else(DrawText(TextFormat("O ataque do Boss deu %d de dano.", ataqueBoss), 280, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }else
-                if(mostrar==2){
+                if(mostrar==2){   // Sua Defesa
                     if(defesaPerfeita){
                         DrawText(TextFormat("Você Defendeu %d do dano do ataque.", ataqueBoss), 180, 590, 40, YELLOW);
                     }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 180, 590, 40, YELLOW));
@@ -377,7 +377,7 @@ int main() {
             }
         
             // CONTROLE DAS AÇÕES---------------------------------------------------------------------------------------    
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==0){  // Principal
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==0){  // HUD Principal
                 PlaySound(select);
                 switch (op)
                 {
@@ -396,7 +396,7 @@ int main() {
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
 
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // Ataques
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // HUD Ataques
                 PlaySound(select);
                 switch (op)
                 {
@@ -427,7 +427,7 @@ int main() {
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
             
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==2){  // Defesas ==================================================================
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==2){  // HUD Defesas 
                 PlaySound(select);
                 switch (op)
                 {
@@ -453,6 +453,15 @@ int main() {
 
             // Volta para o HUD principal ao apertar Backspace
             if(IsKeyPressed(KEY_BACKSPACE) && op2!=0){
+                if(op2==1){
+                    op=1;
+                }else
+                if(op2==2){
+                    op=2;
+                }else
+                if(op2==3){
+                    op=3;
+                }
                 op2=0;
                 PlaySound(select);
             }
