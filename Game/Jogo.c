@@ -102,7 +102,6 @@ int main() {
     // Adicionar elementos
     Music music;
     Sound select;
-    Texture2D coracao;
     Texture2D bg1;
     Texture2D richas;
     Texture2D chay;
@@ -273,12 +272,12 @@ int main() {
                     }
                 }
 
-                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==0){
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==0){   // Seu Ataque
                 mostrar=1;
                 enterPressionado = true; // Marca que Enter foi pressionado
                 }   
 
-                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && mostrar==1){   // Ataque do Boss
                 seuTurno=true;
                 enterPressionado = true; // Marca que Enter foi pressionado
                 seuAtaque=0;
