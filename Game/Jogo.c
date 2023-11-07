@@ -27,10 +27,11 @@ Color selecionado = MAROON;
 Color padrao = WHITE;
 
 // Função para desenhar o Menu
-void DrawMenu(int op) {
-    DrawText("Início"    , 500, 300, FONT_SIZE, (op == 1) ? selecionado : padrao);
-    DrawText("Instruções", 500, 340, FONT_SIZE, (op == 2) ? selecionado : padrao);
-    DrawText("Sair"      , 500, 380, FONT_SIZE, (op == 3) ? selecionado : padrao);
+void DrawMenu(int op, Texture2D bgMenu) {
+    DrawTexture(bgMenu, 0, 0 , RAYWHITE);
+    DrawText("Início"    , 215, 243, FONT_SIZE, (op == 1) ? selecionado : BLACK);
+    DrawText("Instruções", 180, 345, FONT_SIZE, (op == 2) ? selecionado : BLACK);
+    DrawText("Sair"      , 220, 452, FONT_SIZE, (op == 3) ? selecionado : BLACK);
 }
 
 // Função para desenhar as Instruções
@@ -122,13 +123,16 @@ int main() {
     // Adicionar elementos
     Music music;
     Sound select;
+    Texture2D bgMenu;
     Texture2D bg1;
     Texture2D richas;
     Texture2D chay;
+    
 
     // Carregar elementos
     music = LoadMusicStream("./music.mp3");
     select = LoadSound("./click.wav");
+    bgMenu = LoadTexture("./Imagens/background.png");
     bg1 = LoadTexture("./Imagens/Mine3.png");
     richas = LoadTexture("./Imagens/Richas2.png");
     chay = LoadTexture("./Imagens/Chay.png");
@@ -248,7 +252,7 @@ int main() {
     // CONTROLADOR DAS TELAS
         // Menu
         if(desenharMenu){
-            DrawMenu(op);
+            DrawMenu(op, bgMenu);
         }
         // Instruções
         if(desenharInstrucoes){
