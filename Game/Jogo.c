@@ -9,7 +9,7 @@ int yInstrucoes=200;
 int xAcoesHud=200;
 int xVida=25;
 
- // Variáveis Globais
+// Variáveis Globais
 int vida=100;
 int vidaBoss[3]= {150, 200, 300};
 int mana=4;
@@ -27,6 +27,9 @@ int iVida=0, iMana=0, iVidaBoss=0;
 int suaDefesa=0;
 int nDefesa=0;
 bool defesaPerfeita=false;
+
+bool fimFalas=false;
+bool lutando=false;
 
 // Adicionar elementos8
 Music music;
@@ -212,7 +215,18 @@ void DrawHudActions (int op) {
         }
     }
         
+} //Void DrawHudActions
+
+void DrawWinScreen(){
+    DrawRectangle(180, 120, 920, 320, DARKPURPLE);
+    DrawRectangle(190, 130, 900, 300, WHITE);
+    DrawText("PARABENS, VOCÊ VENCEU!", 400, 150, 33, BLACK);
+    
+    DrawText("Pressione Enter para voltar para a seleção de Bosses...", 300, 390, 25, GRAY);
 }
+
+
+
 
 
 // MAIN------------------------------------------------------------------------------------------
@@ -261,16 +275,31 @@ int main() {
                 op += 1;
                 PlaySound(select);
             }
-        } else if(desenharBoss1 && seuTurno){
-            if (IsKeyPressed(KEY_LEFT)) {
-            op -= 1;
-            PlaySound(select);
-            }
-            if (IsKeyPressed(KEY_RIGHT)) {
-                op += 1;
+        } else 
+            if(desenharBoss1 && seuTurno && lutando){
+                if (IsKeyPressed(KEY_LEFT)) {
+                op -= 1;
                 PlaySound(select);
+                }
+                if (IsKeyPressed(KEY_RIGHT)) {
+                    op += 1;
+                    PlaySound(select);
+                }
+                // Volta para o HUD principal ao apertar Backspace
+                if(IsKeyPressed(KEY_BACKSPACE) && op2!=0){
+                    if(op2==1){
+                        op=1;
+                    }else
+                    if(op2==2){
+                        op=2;
+                    }else
+                    if(op2==3){
+                        op=3;
+                    }
+                    op2=0;
+                    PlaySound(select);
+                }
             }
-        }
         // Controle de limite (OP)
         if(op2==0 && desenharBoss1){   // Add Boss2 e Boss3
             if (op < 1) op = 4;
@@ -284,7 +313,7 @@ int main() {
 
 //--------- Testes 
         if(IsKeyPressed(KEY_FOUR)) vida-=10;
-        if(IsKeyPressed(KEY_FIVE)) seuTurno = !seuTurno;
+        if(IsKeyPressed(KEY_FIVE)) lutando = !lutando;
         if(IsKeyPressed(KEY_SIX)) mana+=5;
             
     //Controle Vida, Mana, VidaBoss
@@ -432,10 +461,10 @@ int main() {
                 PlaySound(select);
                 enterPressionado = true; // Marca que Enter foi pressionado
                 seuTurno = true;      // Iniciar turno
+                lutando= true;  // Inicia estado de luta
             }
         }  
 
-       
         
     // Abrir desenho=================================================================================================
         BeginDrawing();
@@ -545,6 +574,7 @@ int main() {
                         defesaPerfeita=false;
                         suaDefesa=0;
                         seuTurno=true;
+                        fimFalas=true;
                     }
                     enterPressionado = true; // Marca que Enter foi pressionado
                 }   
@@ -555,123 +585,127 @@ int main() {
                     suaDefesa=0;
                     enterPressionado = true; // Marca que Enter foi pressionado
                     seuTurno=true;
+                    fimFalas=true;
                 }   
-            }
+                
+                // Desativa estado de luta ao morrer
+                if(desenharBoss1 && (vida<=0 || vidaBoss[nBoss]<=0) && fimFalas){  // Add Boss2 e Boss3
+                    lutando=false;
+                }
+            } // Seu Turno==false
         
             // CONTROLE DAS AÇÕES---------------------------------------------------------------------------------------    
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==0){  // HUD Principal
-                PlaySound(select);
-                switch (op)
-                {
-                case 1:
-                    op2=1;  //Ataques 
-                    break;
-                case 2:
-                    op2=2;  //Defesas
-                    break;
-                case 3:
-                    op2=3;  //Ações
-                    break;
-                case 4:     //Correr
-                    desenharBoss1 = false; // Sai da Boss Fight 1
-                    desenharBosses = true; // Volta a seleção de Bosses
+            if(seuTurno && lutando){
+                
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==0){  // HUD Principal
+                    PlaySound(select);
+                    switch (op)
+                    {
+                        case 1:
+                            op2=1;  //Ataques 
+                            break;
+                        case 2:
+                            op2=2;  //Defesas
+                            break;
+                        case 3:
+                            op2=3;  //Ações
+                            break;
+                        case 4:     //Correr
+                            desenharBoss1 = false; // Sai da Boss Fight 1
+                            desenharBosses = true; // Volta a seleção de Bosses
+                            op=1;
+                            break;
+                        default:
+                            break;
+                    }
                     op=1;
-                    break;
-                default:
-                    break;
+                    enterPressionado = true; // Marca que Enter foi pressionado
                 }
-                op=1;
-                enterPressionado = true; // Marca que Enter foi pressionado
-            }
-
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==1){  // HUD Ataques
-                PlaySound(select);
-                switch (op)
-                {
-                case 1: // Espadada 
-                    seuAtaque= 5 + rand()%16;  //(5-20)
-                    seuTurno=false;
-                    break;
-                case 2: // Bola de fogo
-                    if(mana>=1){
-                        seuAtaque= 8 + rand()%18;  //(8-25)
-                        mana-=1;
-                        seuTurno=false;
-                    } 
-                    break;
-                case 3: // Hackear
-                    if(mana>=2){
-                        seuAtaque= 12 + rand()%19;  //(12-30)
-                        mana-=2;
-                        seuTurno=false;
-                    } 
-                    break;
-                default:
-                    break;
+                // Ataque, Defesa, Ações
+                if(IsKeyPressed(KEY_ENTER) && !enterPressionado){
+                    
+                    if(op2==1){  // HUD Ataques
+                        PlaySound(select);
+                        switch (op)
+                        {
+                            case 1: // Espadada 
+                                seuAtaque= 5 + rand()%16;  //(5-20)
+                                seuTurno=false;
+                                break;
+                            case 2: // Bola de fogo
+                                if(mana>=1){
+                                    seuAtaque= 8 + rand()%18;  //(8-25)
+                                    mana-=1;
+                                    seuTurno=false;
+                                } 
+                                break;
+                            case 3: // Hackear
+                                if(mana>=2){
+                                    seuAtaque= 12 + rand()%19;  //(12-30)
+                                    mana-=2;
+                                    seuTurno=false;
+                                } 
+                                break;
+                            default:
+                                break;
+                        }
+                        mostrar=0;
+                        vidaBoss[0]-=seuAtaque;
+                        x=0; //Controlador Boss
+                        enterPressionado = true; // Marca que Enter foi pressionado
+                    }
+                    
+                    if(op2==2){  // HUD Defesas 
+                        PlaySound(select);
+                        switch (op)
+                        {
+                            case 1: // Defesa Normal 
+                                suaDefesa=5+ rand()%16;
+                                seuTurno=false;                    
+                                break;
+                            case 2: // Defesa Perfeita
+                                if(mana>=1){
+                                    defesaPerfeita=true;  
+                                    mana-=1;
+                                    seuTurno=false;
+                                } 
+                                break;
+                            default:
+                                break;
+                        }
+                        mostrar=1;
+                        nDefesa=suaDefesa;
+                        x=0; //Controlador Boss
+                        enterPressionado = true; // Marca que Enter foi pressionado
+                    }
+                    
+                    if(op2==3){  // HUD Ações 
+                        PlaySound(select);
+                        switch (op)
+                        {
+                            case 1: // Meditar
+                            mana+=4;
+                            seuTurno=false;                    
+                            break;
+                            default:
+                            break;
+                        }
+                        mostrar=1;
+                        x=0; //Controlador Boss
+                        enterPressionado = true; // Marca que Enter foi pressionado
+                    }     
                 }
-                mostrar=0;
-                vidaBoss[0]-=seuAtaque;
-                x=0; //Controlador Boss
-                enterPressionado = true; // Marca que Enter foi pressionado
-            }
+                fimFalas=false;
+            } // Seu Turno && Lutando
             
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==2){  // HUD Defesas 
-                PlaySound(select);
-                switch (op)
-                {
-                case 1: // Defesa Normal 
-                    suaDefesa=5+ rand()%16;
-                    seuTurno=false;                    
-                    break;
-                case 2: // Defesa Perfeita
-                    if(mana>=1){
-                        defesaPerfeita=true;  
-                        mana-=1;
-                        seuTurno=false;
-                    } 
-                    break;
-                default:
-                    break;
-                }
-                mostrar=1;
-                nDefesa=suaDefesa;
-                x=0; //Controlador Boss
-                enterPressionado = true; // Marca que Enter foi pressionado
-            }
-            
-            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==3){  // HUD Ações 
-                PlaySound(select);
-                switch (op)
-                {
-                case 1: // Meditar
-                    mana+=4;
-                    seuTurno=false;                    
-                    break;
-                default:
-                    break;
-                }
-                mostrar=1;
-                x=0; //Controlador Boss
-                enterPressionado = true; // Marca que Enter foi pressionado
-            }
+        } //Desenhar Bosses
 
-
-            // Volta para o HUD principal ao apertar Backspace
-            if(IsKeyPressed(KEY_BACKSPACE) && op2!=0){
-                if(op2==1){
-                    op=1;
-                }else
-                if(op2==2){
-                    op=2;
-                }else
-                if(op2==3){
-                    op=3;
-                }
-                op2=0;
-                PlaySound(select);
-            }
+        //Desenhar Win Screen
+        if(!lutando && desenharBoss1){ // Add Boss2 e Boss3
+            DrawWinScreen();
+            op2=0;
+            op=1;
         }
-
 
 
 
