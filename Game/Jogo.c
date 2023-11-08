@@ -6,7 +6,7 @@
 #define WINDOW_HEIGHT 720
 #define FONT_SIZE 30
 int yInstrucoes=200; 
-int xAcoesHud=120;
+int xAcoesHud=200;
 int xVida=25;
 
  // Variáveis Globais
@@ -20,6 +20,9 @@ int ataqueBoss;
 int curaBoss;
 int seuAtaque=0;
 int mostrar=0;
+
+int nBoss=0;
+int iVida=0, iMana=0, iVidaBoss=0;
 
 int suaDefesa=0;
 int nDefesa=0;
@@ -73,6 +76,57 @@ void DrawBoss1 (Texture2D bg1,Texture2D richas, Texture2D chay) {
     DrawTexture(chay, 700, 260, WHITE); // desenhar Boss
 }
 
+
+// Função para desenhar Vida, Mana e vida do Boss
+void DrawStatus(){
+    /*
+    //Desenha sua Vida
+    DrawText(TextFormat("%d", vida), xVida+100, 20, 30, YELLOW);   // Barra de vida (Sua)
+    DrawText("VIDA:", xVida, 20, 30, YELLOW);
+      
+    //Desenha Vida Boss (Temporário)
+    DrawText(TextFormat("%d", vidaBoss[0]), 1070, 20, 30, YELLOW); 
+    DrawText("Vida Boss:", 900, 20, 30, YELLOW);
+
+    //Desenha Mana (Temporário)
+    DrawText(TextFormat("%d", mana), 490, 20, 30, YELLOW); 
+    DrawText("MANA:", 390, 20, 30, YELLOW);
+    */
+    
+    //Desenha o HUD Superior
+    DrawRectangle(0, 0, 1280, 60, DARKPURPLE);
+    DrawRectangle(5, 5, 1270, 50, WHITE);
+    
+    
+    //Desenha Barras de: Vida, Mana, VidaBoss
+    for(int i=0; i<10; i++){
+        //VIDA
+        if(i<iVida)DrawRectangle(xVida+12*i, 20, 10, 20, RED);
+        DrawRectangleLines(xVida+12*i, 20, 10, 20, MAROON);
+        
+        //MANA
+        if(i<iMana)DrawRectangle(270+12*i, 20, 10, 20, BLUE);
+        DrawRectangleLines(270+12*i, 20, 10, 20, DARKBLUE);
+        
+        //VIDA BOSS
+        if(i<iVidaBoss)DrawRectangle(1000+15*i, 20, 15, 20, RED);
+        
+    }
+    
+    //Sua Vida
+    DrawText(TextFormat("%d/100", vida), 148, 20, 20, BLACK);
+    
+    //Sua Mana
+    DrawText(TextFormat("%d/10", mana), 394, 20, 20, BLACK);
+    
+    //Vida Boss1
+    DrawRectangleLines(1000, 20, 150, 20, BLACK);
+    DrawText(TextFormat("%d/150", vidaBoss[0]), 1158, 20, 20, BLACK);
+    DrawText("BOSS 1", 920, 20, 20, BLACK);
+    
+    
+}
+
 //função para desenhar o HUD 
 void DrawHud () {
     // Retângulo do HUD
@@ -85,20 +139,20 @@ void DrawHudActions (int op) {
     switch (op2)
     {
     case 0:
-    DrawText("Ataque", xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); //1
-    DrawText("Defesa", xAcoesHud+300, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); //2
-    DrawText("Ações" , xAcoesHud+600, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); //3
-    DrawText("Fugir" , xAcoesHud+900, 590, FONT_SIZE, (op == 4) ? YELLOW : padrao); //4
+    DrawText("Ataque", 120    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); //1
+    DrawText("Defesa", 120+300, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); //2
+    DrawText("Ações" , 120+600, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); //3
+    DrawText("Fugir" , 120+900, 590, FONT_SIZE, (op == 4) ? YELLOW : padrao); //4
         break;
     case 1: // ataqueBosss
     DrawText("Espadada",     xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); 
-    DrawText("Bola de fogo", xAcoesHud+340, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); 
-    DrawText("Hackear" ,     xAcoesHud+690, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); 
+    DrawText("Bola de fogo", xAcoesHud+290, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); 
+    DrawText("Hackear" ,     xAcoesHud+640, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); 
         break;
     case 2: // Ações
     DrawText("Defesa",          xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); 
-    DrawText("Defesa Perfeita", xAcoesHud+290, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); 
-    DrawText("???????",         xAcoesHud+680, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); 
+    DrawText("Defesa Perfeita", xAcoesHud+260, 590, FONT_SIZE, (op == 2) ? YELLOW : padrao); 
+    DrawText("???????",         xAcoesHud+650, 590, FONT_SIZE, (op == 3) ? YELLOW : padrao); 
         break;
     case 3: // Ações
     DrawText("Meditar", xAcoesHud    , 590, FONT_SIZE, (op == 1) ? YELLOW : padrao); 
@@ -114,15 +168,15 @@ void DrawHudActions (int op) {
         switch(op){
         case 1: //Espadada
         DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
-        DrawText("Ataca com a espada causando 5-20 de dano.", 400, 690, 20, LIGHTGRAY);
+        DrawText("Ataca com a espada causando 5-20 de dano.", 380, 690, 20, LIGHTGRAY);
             break;
         case 2: //Bola de Fogo
         DrawText("Custo de Mana: 1", 15, 690, 20, LIGHTGRAY);
-        DrawText("Atira uma bola flamejante causando 8-25 de dano.", 400, 690, 20, LIGHTGRAY);
+        DrawText("Atira uma bola flamejante causando 8-25 de dano.", 380, 690, 20, LIGHTGRAY);
             break;
         case 3: //Hackear
         DrawText("Custo de Mana: 2", 15, 690, 20, LIGHTGRAY);
-        DrawText("Hackeia o inimigo causando 12-30 de dano.", 420, 690, 20, LIGHTGRAY);
+        DrawText("Hackeia o inimigo causando 12-30 de dano.", 400, 690, 20, LIGHTGRAY);
             break;
         }
     }
@@ -148,7 +202,7 @@ void DrawHudActions (int op) {
         switch(op){
         case 1: //Meditar
         DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
-        DrawText("Restaura +4 de Mana.", 400, 690, 20, LIGHTGRAY);
+        DrawText("Restaura +4 de Mana.", 460, 690, 20, LIGHTGRAY);
             break;
         case 2: //???????????????
         DrawText("Custo de Mana: ?", 15, 690, 20, LIGHTGRAY);
@@ -232,10 +286,109 @@ int main() {
          
 
 //--------- Testes 
-            if(IsKeyPressed(KEY_FOUR)) vida-=25;
-            if(IsKeyPressed(KEY_FIVE)) seuTurno = !seuTurno;
-            if(IsKeyPressed(KEY_SIX)) mana+=5;
+        if(IsKeyPressed(KEY_FOUR)) vida-=10;
+        if(IsKeyPressed(KEY_FIVE)) seuTurno = !seuTurno;
+        if(IsKeyPressed(KEY_SIX)) mana+=5;
+            
+    //Controle Vida, Mana, VidaBoss
+        //VIDA
+        if(vida>=100){
+            iVida=10;
+        }else
+        if(vida<100 && vida>=90){
+            iVida=9;
+        }else
+        if(vida<90 && vida>=80){
+            iVida=8;
+        }else
+        if(vida<80 && vida>=70){
+            iVida=7;
+        }else
+        if(vida<70 && vida>=60){
+            iVida=6;
+        }else
+        if(vida<60 && vida>=50){
+            iVida=5;
+        }else
+        if(vida<50 && vida>=40){
+            iVida=4;
+        }else
+        if(vida<40 && vida>=30){
+            iVida=3;
+        }else    
+        if(vida<30 && vida>=20){
+            iVida=2;
+        }else
+        if(vida<20 && vida>0){
+            iVida=1;
+        }else
+        if(vida<=0){
+            iVida=0;
+        }
         
+        //MANA
+        if (mana >= 10) {
+            iMana = 10;
+        } else 
+        if (mana < 10 && mana >= 9) {
+            iMana = 9;
+        } else 
+        if (mana < 9 && mana >= 8) {
+            iMana = 8;
+        } else 
+        if (mana < 8 && mana >= 7) {
+            iMana = 7;
+        } else 
+        if (mana < 7 && mana >= 6) {
+            iMana = 6;
+        } else 
+        if (mana < 6 && mana >= 5) {
+            iMana = 5;
+        } else 
+        if (mana < 5 && mana >= 4) {
+            iMana = 4;
+        } else 
+        if (mana < 4 && mana >= 3) {
+            iMana = 3;
+        } else 
+        if (mana < 3 && mana >= 2) {
+            iMana = 2;
+        } else 
+        if (mana < 2 && mana > 0) {
+            iMana = 1;
+        } else 
+        if (mana <= 0) {
+            iMana = 0;
+        }
+        
+        //VIDA BOSS
+        if (vidaBoss[nBoss] >= 150) {
+            iVidaBoss = 10;
+        } else if (vidaBoss[nBoss] < 150 && vidaBoss[nBoss] >= 135) {
+            iVidaBoss = 9;
+        } else if (vidaBoss[nBoss] < 135 && vidaBoss[nBoss] >= 120) {
+            iVidaBoss = 8;
+        } else if (vidaBoss[nBoss] < 120 && vidaBoss[nBoss] >= 105) {
+            iVidaBoss = 7;
+        } else if (vidaBoss[nBoss] < 105 && vidaBoss[nBoss] >= 90) {
+            iVidaBoss = 6;
+        } else if (vidaBoss[nBoss] < 90 && vidaBoss[nBoss] >= 75) {
+            iVidaBoss = 5;
+        } else if (vidaBoss[nBoss] < 75 && vidaBoss[nBoss] >= 60) {
+            iVidaBoss = 4;
+        } else if (vidaBoss[nBoss] < 60 && vidaBoss[nBoss] >= 45) {
+            iVidaBoss = 3;
+        } else if (vidaBoss[nBoss] < 45 && vidaBoss[nBoss] >= 30) {
+            iVidaBoss = 2;
+        } else if (vidaBoss[nBoss] < 30 && vidaBoss[nBoss] > 0) {
+            iVidaBoss = 1;
+        } else if (vidaBoss[nBoss] <= 0) {
+            iVidaBoss = 0;
+        }
+
+
+
+
 
         //CONTROLE DAS TELAS
         // Controle de tela do Menu
@@ -351,16 +504,7 @@ int main() {
         // (Boss1, Boss2, Boss3)
         if(desenharBoss1){  //Adicionar Boss2 e Boss3 (depois)
             DrawHud ();               // HUD
-            DrawText(TextFormat("%d", vida), xVida+100, 20, 30, YELLOW);   // Barra de vida (Sua)
-            DrawText("VIDA:", xVida, 20, 30, YELLOW);
-      
-            //Desenha Vida Boss (Temporário)
-            DrawText(TextFormat("%d", vidaBoss[0]), 1070, 20, 30, YELLOW); 
-            DrawText("Vida Boss:", 900, 20, 30, YELLOW);
-
-            //Desenha Mana (Temporário)
-            DrawText(TextFormat("%d", mana), 490, 20, 30, YELLOW); 
-            DrawText("MANA:", 390, 20, 30, YELLOW);
+            DrawStatus();
 
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
@@ -541,7 +685,7 @@ int main() {
 
       // Desenha o número da opção atual para depuração (op)
         //DrawText(TextFormat(" op: %d", op), 100, 100, 40, BLUE);  ***
-        //DrawText(TextFormat("atka: %d", seuAtaque), 100, 200, 40, BLUE);  ***
+        //DrawText(TextFormat("Vida: %d", vida), 100, 200, 40, BLUE);  
 
         // Fechar desenho
         EndDrawing();
