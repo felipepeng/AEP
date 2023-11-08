@@ -15,7 +15,7 @@ int vidaBoss[3]= {150, 200, 300};
 int mana=4;
 int op2=0;
 int ataqBoss;
-int x=0;
+int x=0, y=0;
 int ataqueBoss;
 int curaBoss;
 int seuAtaque=0;
@@ -148,7 +148,7 @@ void DrawHudActions (int op) {
         switch(op){
         case 1: //Meditar
         DrawText("Custo de Mana: 0", 15, 690, 20, LIGHTGRAY);
-        DrawText("Restaura +2 de Mana.", 400, 690, 20, LIGHTGRAY);
+        DrawText("Restaura +4 de Mana.", 400, 690, 20, LIGHTGRAY);
             break;
         case 2: //???????????????
         DrawText("Custo de Mana: ?", 15, 690, 20, LIGHTGRAY);
@@ -310,36 +310,40 @@ int main() {
 
             // ataqueBosss do Boss 1
             if(seuTurno==false){
-                if(x<=2){
-                    x++;
-                    if(x==1){
-                        ataqBoss=rand()%3;
-                        mana+=1;
-                        switch (ataqBoss)
-                        {
-                            case 0: // ataqueBoss Padrão
-                            ataqueBoss= 5+rand()%11;
-                                break;
+                if(x==0){
+                    ataqBoss=rand()%3;
+                    switch (ataqBoss)
+                    {
+                        case 0: // ataqueBoss Padrão
+                        ataqueBoss= 5+rand()%11;
+                        break;
 
-                            case 1: // ataqueBoss Empoderado
-                            ataqueBoss= 10+rand()%11;
-                                break;
+                        case 1: // ataqueBoss Empoderado
+                        ataqueBoss= 10+rand()%11;
+                        break;
                             
-                            case 2: // HEAL
-                            curaBoss= 1+rand()%10;
-                            vidaBoss[0]+=curaBoss;
-                                break;
-
-                            default:
-                                break;
-                        }
+                        case 2: // HEAL
+                        curaBoss= 1+rand()%10;
+                        vidaBoss[0]+=curaBoss;
+                        break;
+                        default:
+                        break;
+                    }
                         
-                        if(!defesaPerfeita && ataqBoss!=2){
-                            if(ataqueBoss>=suaDefesa){
-                                vida-=ataqueBoss -suaDefesa;        
-                            } else (suaDefesa=ataqueBoss);
+                    if(!defesaPerfeita && ataqBoss!=2){ // Ajustes nas Defesas
+                        if(ataqueBoss>=suaDefesa){
+                            vida-=ataqueBoss -suaDefesa;        
+                        } else{
+                            nDefesa=ataqueBoss;
                         }
                     }
+                        
+                    if(ataqBoss==2){
+                        nDefesa=0;
+                    }
+                    
+                    y=0; //Controlador Player
+                    x++;
                 }
             }
         }
@@ -361,6 +365,10 @@ int main() {
             if(seuTurno){
                 DrawHudActions(op);   // Ações do HUD
                 ataqueBoss=0;   // Reseta o dano de ataque do Boss
+                if(y==0){
+                    mana+=1;
+                    y+=1;
+                }
             }
             
             // Sinaliza ações ****  (Talvez trocar este+Controle de Telas para o Boss1)
@@ -431,6 +439,7 @@ int main() {
                 default:
                     break;
                 }
+                op=1;
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
 
@@ -461,7 +470,7 @@ int main() {
                 }
                 mostrar=0;
                 vidaBoss[0]-=seuAtaque;
-                x=0;
+                x=0; //Controlador Boss
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
             
@@ -485,9 +494,26 @@ int main() {
                 }
                 mostrar=1;
                 nDefesa=suaDefesa;
-                x=0;
+                x=0; //Controlador Boss
                 enterPressionado = true; // Marca que Enter foi pressionado
             }
+            
+            if(seuTurno && IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==3){  // HUD Ações 
+                PlaySound(select);
+                switch (op)
+                {
+                case 1: // Meditar
+                    mana+=4;
+                    seuTurno=false;                    
+                    break;
+                default:
+                    break;
+                }
+                mostrar=1;
+                x=0; //Controlador Boss
+                enterPressionado = true; // Marca que Enter foi pressionado
+            }
+
 
             // Volta para o HUD principal ao apertar Backspace
             if(IsKeyPressed(KEY_BACKSPACE) && op2!=0){
