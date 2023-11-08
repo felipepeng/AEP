@@ -33,7 +33,7 @@ bool lutando=false;
 
 // Adicionar elementos8
 Music music;
-Sound select;
+Sound selectSound;
 Texture2D bgMenu;
 Texture2D bg1;
 Texture2D richas;
@@ -226,9 +226,6 @@ void DrawWinScreen(){
 }
 
 
-
-
-
 // MAIN------------------------------------------------------------------------------------------
 int main() {
     // Inicialização
@@ -237,7 +234,7 @@ int main() {
 
     // Carregar elementos
     music = LoadMusicStream("./music.mp3");
-    select = LoadSound("./click.wav");
+    selectSound = LoadSound("./click.wav");
     bgMenu = LoadTexture("./Imagens/background.png");
     bg1 = LoadTexture("./Imagens/Mine3.png");
     richas = LoadTexture("./Imagens/Richas2.png");
@@ -269,21 +266,21 @@ int main() {
         if(desenharMenu || desenharBosses){  // Menu e Bosses
             if (IsKeyPressed(KEY_UP)) {
             op -= 1;
-            PlaySound(select);
+            PlaySound(selectSound);
             }
             if (IsKeyPressed(KEY_DOWN)) {
                 op += 1;
-                PlaySound(select);
+                PlaySound(selectSound);
             }
         } else 
             if(desenharBoss1 && seuTurno && lutando){
                 if (IsKeyPressed(KEY_LEFT)) {
                 op -= 1;
-                PlaySound(select);
+                PlaySound(selectSound);
                 }
                 if (IsKeyPressed(KEY_RIGHT)) {
                     op += 1;
-                    PlaySound(select);
+                    PlaySound(selectSound);
                 }
                 // Volta para o HUD principal ao apertar Backspace
                 if(IsKeyPressed(KEY_BACKSPACE) && op2!=0){
@@ -297,7 +294,7 @@ int main() {
                         op=3;
                     }
                     op2=0;
-                    PlaySound(select);
+                    PlaySound(selectSound);
                 }
             }
         // Controle de limite (OP)
@@ -422,14 +419,14 @@ int main() {
             if (op == 1 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Bosses
                 desenharMenu = false; // Sai do Menu
                 desenharBosses = true; // Ativa o desenho de Seleção de Bosses
-                PlaySound(select);
+                PlaySound(selectSound);
                 enterPressionado = true; // Marca que Enter foi pressionado
             } else
             
             if (op == 2 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Instruções
                 desenharMenu = false; // Sai do Menu
                 desenharInstrucoes = true; // Ativa o desenho da tela de Instruções
-                PlaySound(select);
+                PlaySound(selectSound);
                 enterPressionado = true; // Marca que Enter foi pressionado
             } else
 
@@ -442,7 +439,7 @@ int main() {
             if (IsKeyPressed(KEY_BACKSPACE)) { // Voltar a tela
                 desenharInstrucoes = false; // Sai das Instruções
                 desenharMenu = true; // Volta ao Menu
-                PlaySound(select);
+                PlaySound(selectSound);
             }
         }  
         // Controle de tela Bosses
@@ -450,7 +447,7 @@ int main() {
             if (IsKeyPressed(KEY_BACKSPACE)) { // Voltar a tela
                 desenharBosses = false; // Sai da seleção de bosses
                 desenharMenu = true; // Volta ao menu
-                PlaySound(select);
+                PlaySound(selectSound);
                 op=1;
             }
 
@@ -458,7 +455,7 @@ int main() {
              if (op == 1 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Boss 1
                 desenharBosses = false; // Sai da seleção de Bosses
                 desenharBoss1 = true; // Ativa a Boss Fight 1
-                PlaySound(select);
+                PlaySound(selectSound);
                 enterPressionado = true; // Marca que Enter foi pressionado
                 seuTurno = true;      // Iniciar turno
                 lutando= true;  // Inicia estado de luta
@@ -598,7 +595,7 @@ int main() {
             if(seuTurno && lutando){
                 
                 if(IsKeyPressed(KEY_ENTER) && !enterPressionado && op2==0){  // HUD Principal
-                    PlaySound(select);
+                    PlaySound(selectSound);
                     switch (op)
                     {
                         case 1:
@@ -625,7 +622,7 @@ int main() {
                 if(IsKeyPressed(KEY_ENTER) && !enterPressionado){
                     
                     if(op2==1){  // HUD Ataques
-                        PlaySound(select);
+                        PlaySound(selectSound);
                         switch (op)
                         {
                             case 1: // Espadada 
@@ -656,7 +653,7 @@ int main() {
                     }
                     
                     if(op2==2){  // HUD Defesas 
-                        PlaySound(select);
+                        PlaySound(selectSound);
                         switch (op)
                         {
                             case 1: // Defesa Normal 
@@ -680,7 +677,7 @@ int main() {
                     }
                     
                     if(op2==3){  // HUD Ações 
-                        PlaySound(select);
+                        PlaySound(selectSound);
                         switch (op)
                         {
                             case 1: // Meditar
