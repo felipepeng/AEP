@@ -63,9 +63,21 @@ void DrawInstrucoes(int op) {
 
 // Função para desenhar a seleção de Bosses
 void DrawBosses(int op) {
-    DrawText("BOSS 1", 500, 300, 30, (op == 1) ? selecionado : padrao);
-    DrawText("BOSS 2", 500, 340, 30, (op == 2) ? selecionado : padrao);
-    DrawText("BOSS 3", 500, 380, 30, (op == 3) ? selecionado : padrao);
+    DrawTexture(bgMenu, 0, 0 , RAYWHITE);
+    DrawText("BOSS 1", 200, 243, 30, (op == 1) ? selecionado : BLACK);
+    DrawText("BOSS 2", 200, 345, 30, (op == 2) ? selecionado : BLACK);
+    DrawText("BOSS 3", 200, 452, 30, (op == 3) ? selecionado : BLACK);
+    
+    if(op==1){
+        DrawTextureEx(chay, (Vector2){780, 220}, 0, 1.3f, RAYWHITE);
+    }else
+    if(op==2){
+        DrawTextureEx(MatrixPeng, (Vector2){628, 200}, 0, 1.3f, RAYWHITE);
+    }else
+    if(op==3){
+        DrawTextureEx(CubePeng, (Vector2){810, 280}, 0, 0.5f, RAYWHITE);
+    }
+    
 }
 
 // Função para desenhar o Boss1
@@ -79,19 +91,6 @@ void DrawBoss1 (Texture2D bg1,Texture2D richas, Texture2D chay) {
 
 // Função para desenhar Vida, Mana e vida do Boss
 void DrawStatus(){
-    /*
-    //Desenha sua Vida
-    DrawText(TextFormat("%d", vida), xVida+100, 20, 30, YELLOW);   // Barra de vida (Sua)
-    DrawText("VIDA:", xVida, 20, 30, YELLOW);
-      
-    //Desenha Vida Boss (Temporário)
-    DrawText(TextFormat("%d", vidaBoss[0]), 1070, 20, 30, YELLOW); 
-    DrawText("Vida Boss:", 900, 20, 30, YELLOW);
-
-    //Desenha Mana (Temporário)
-    DrawText(TextFormat("%d", mana), 490, 20, 30, YELLOW); 
-    DrawText("MANA:", 390, 20, 30, YELLOW);
-    */
     
     //Desenha o HUD Superior
     DrawRectangle(0, 0, 1280, 60, DARKPURPLE);
@@ -110,7 +109,6 @@ void DrawStatus(){
         
         //VIDA BOSS
         if(i<iVidaBoss)DrawRectangle(1000+15*i, 20, 15, 20, RED);
-        
     }
     
     //Sua Vida
@@ -123,8 +121,7 @@ void DrawStatus(){
     DrawRectangleLines(1000, 20, 150, 20, BLACK);
     DrawText(TextFormat("%d/150", vidaBoss[0]), 1158, 20, 20, BLACK);
     DrawText("BOSS 1", 920, 20, 20, BLACK);
-    
-    
+ 
 }
 
 //função para desenhar o HUD 
@@ -529,8 +526,8 @@ int main() {
                 }else
                 if(mostrar==2){   // Sua Defesa
                     if(defesaPerfeita){
-                        DrawText(TextFormat("Você Defendeu %d de dano do ataque.", ataqueBoss), 190, 590, 40, YELLOW);
-                    }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 190, 590, 40, YELLOW));
+                        DrawText(TextFormat("Você Defendeu %d de dano do ataque.", ataqueBoss), 238, 590, 40, YELLOW);
+                    }else (DrawText(TextFormat("Você Defendeu %d de dano do ataque.", nDefesa), 238, 590, 40, YELLOW));
                     DrawText("Aperte ENTER...", 1102, 690, 20, RAYWHITE);
                 }
                 
