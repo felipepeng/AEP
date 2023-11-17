@@ -32,17 +32,30 @@ bool defesaPerfeita=false;
 bool fimFalas=false;
 bool lutando=false;
 
+bool seuTurno = false; // Seu turno
+// Varíaveis controladoras de tela
+bool desenharMenu = true;  // Menu
+bool desenharInstrucoes = false; // Instruções
+bool desenharBosses = false; // Seleção de Bosses
+bool desenharBoss1 = false; // Boss 1
+bool desenharBoss2 = false; // Boss2
+bool desenharBoss3 = false; // Boss2
+
 // Adicionar elementos8
 Music music;
 Sound selectSound;
 Texture2D bgMenu;
 Texture2D bg1;
 Texture2D bg2;
+Texture2D bg3;
 Texture2D richas;
 Texture2D chay;
+Texture2D minecraftIcon;
 Texture2D CubePeng;
 Texture2D MatrixPeng;
 Texture2D blaze;
+Texture2D zumbi;
+Texture2D enderDragon;
 
 // Cores
 Color selecionado = MAROON;
@@ -51,7 +64,7 @@ Color padrao = WHITE;
 // Função para desenhar o Menu
 void DrawMenu(int op, Texture2D bgMenu) {
     DrawTexture(bgMenu, 0, 0 , RAYWHITE);
-    DrawTextureEx(CubePeng, (Vector2){730, 220}, 0, 1.0f, RAYWHITE);
+    DrawTextureEx(minecraftIcon, (Vector2){745, 190}, 0, 0.1f, RAYWHITE);
   //DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
     DrawText("Início"    , 215, 243, FONT_SIZE, (op == 1) ? selecionado : BLACK);
     DrawText("Instruções", 173, 345, FONT_SIZE, (op == 2) ? selecionado : BLACK);
@@ -75,23 +88,33 @@ void DrawBosses(int op) {
     DrawText("BOSS 3", 200, 452, 30, (op == 3) ? selecionado : BLACK);
     
     if(op==1){
-        DrawTextureEx(chay, (Vector2){780, 220}, 0, 1.3f, RAYWHITE);
+        DrawTextureEx(zumbi, (Vector2){575, 90}, 0, 1.3f, RAYWHITE);
     }else
     if(op==2){
-        DrawTextureEx(MatrixPeng, (Vector2){628, 200}, 0, 1.3f, RAYWHITE);
+        DrawTextureEx(blaze, (Vector2){790, 220}, 0, 1.3f, RAYWHITE);
     }else
     if(op==3){
-        DrawTextureEx(CubePeng, (Vector2){810, 280}, 0, 0.5f, RAYWHITE);
+        DrawTextureEx(enderDragon, (Vector2){580, 100}, 0, 1.2f, RAYWHITE);
     }
     
 }
 
 // Função para desenhar o Boss1
-void DrawBoss1 (Texture2D bg1,Texture2D richas, Texture2D chay) {
-    DrawText("BOSS 1", 1100, 30, 45, PINK); 
-    DrawTexture(bg1, 0, 0, WHITE); // Background Boss 1
-    DrawTexture(richas, 150, 275, WHITE); // desenhar personagem
-    DrawTexture(chay, 700, 260, WHITE); // desenhar Boss
+void DrawBoss1 (Texture2D background,Texture2D player, Texture2D inimigo) {
+    if(desenharBoss1){
+        DrawTexture(background, 0, 0, WHITE); // Background Boss 1
+        DrawTexture(player, 150, 275, WHITE); // desenhar personagem
+        DrawTexture(inimigo, 600, 140, WHITE); // desenhar Boss
+    }else if(desenharBoss2){
+        DrawTexture(background, 0, 0, WHITE); // Background Boss 1
+        DrawTexture(player, 140, 275, WHITE); // desenhar personagem
+        DrawTexture(inimigo, 850, 170, WHITE); // desenhar Boss
+    }else if(desenharBoss3){
+        DrawTexture(background, 0, 0, WHITE); // Background Boss 1
+        DrawTexture(player, 150, 275, WHITE); // desenhar personagem
+        DrawTexture(inimigo, 670, 80, WHITE); // desenhar Boss
+    }
+    
 }
 
 
@@ -250,11 +273,15 @@ int main() {
     bgMenu = LoadTexture("./Imagens/background.png");
     bg1 = LoadTexture("./Imagens/Mine3.png");
     bg2 = LoadTexture("./Imagens/nether3.png");
+    bg3 = LoadTexture("./Imagens/theEnd3.png");
     richas = LoadTexture("./Imagens/Richas2.png");
     chay = LoadTexture("./Imagens/Chay.png");
+    minecraftIcon = LoadTexture("./Imagens/mineIcone.png");
     CubePeng = LoadTexture("./Imagens/CubePeng.png");
     MatrixPeng = LoadTexture("./Imagens/PengMatrix.png");
     blaze = LoadTexture("./Imagens/blaze.png");
+    zumbi= LoadTexture("./Imagens/zumbi.png");
+    enderDragon= LoadTexture("./Imagens/Ender_Dragon.png");
 
     // Tocar música
     PlayMusicStream(music);
@@ -264,14 +291,7 @@ int main() {
 
     bool enterPressionado = false; // Computar apenas uma vez o Enter
 
-    bool seuTurno = false; // Seu turno
-    // Varíaveis controladoras de tela
-    bool desenharMenu = true;  // Menu
-    bool desenharInstrucoes = false; // Instruções
-    bool desenharBosses = false; // Seleção de Bosses
-    bool desenharBoss1 = false; // Boss 1
-    bool desenharBoss2 = false; // Boss2
-    bool desenharBoss3 = false; // Boss2
+    
     
     // Laço de repetição
     while (!WindowShouldClose()) {
@@ -516,7 +536,7 @@ int main() {
         }
         // Boss 1
         if (desenharBoss1) {
-            DrawBoss1(bg1, richas, chay); // Desenha o Boss 1
+            DrawBoss1(bg1, richas, zumbi); // Desenha o Boss 1
             nBoss=0;
         }
         // Boss 2
@@ -526,7 +546,7 @@ int main() {
         }
         // Boss 3
         if (desenharBoss3) {
-            DrawBoss1(bg1, richas, CubePeng); // Desenha o Boss 3
+            DrawBoss1(bg3, richas, enderDragon); // Desenha o Boss 3
             nBoss=2;
         }
 
