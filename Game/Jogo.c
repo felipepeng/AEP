@@ -12,6 +12,7 @@ int xVida=25;
 // Variáveis Globais
 int vida=100;
 int vidaBoss[3]= {150, 200, 300};
+int qntVidaBoss[3]= {150, 200, 300}; 
 int mana=4;
 int op2=0;
 int ataqBoss;
@@ -36,10 +37,12 @@ Music music;
 Sound selectSound;
 Texture2D bgMenu;
 Texture2D bg1;
+Texture2D bg2;
 Texture2D richas;
 Texture2D chay;
 Texture2D CubePeng;
 Texture2D MatrixPeng;
+Texture2D blaze;
 
 // Cores
 Color selecionado = MAROON;
@@ -122,9 +125,9 @@ void DrawStatus(){
     
     //Vida Boss1
     DrawRectangleLines(1000, 20, 150, 20, BLACK);
-    DrawText(TextFormat("%d/150", vidaBoss[0]), 1158, 20, 20, BLACK);
-    DrawText("BOSS 1", 920, 20, 20, BLACK);
- 
+    DrawText(TextFormat("%d/%d", vidaBoss[nBoss], qntVidaBoss[nBoss]), 1158, 20, 20, BLACK);
+    DrawText(TextFormat("Boss %d", nBoss+1) , 920, 20, 20, BLACK);
+
 }
 
 //função para desenhar o HUD 
@@ -220,7 +223,16 @@ void DrawHudActions (int op) {
 void DrawWinScreen(){
     DrawRectangle(180, 120, 920, 320, DARKPURPLE);
     DrawRectangle(190, 130, 900, 300, WHITE);
-    DrawText("PARABENS, VOCÊ VENCEU!", 400, 150, 33, BLACK);
+    
+    if(vida>0 && vidaBoss[nBoss]<=0){
+        DrawText("PARABENS, VOCÊ VENCEU! :D", 400, 150, 33, BLACK);
+    }
+    else if(vida<=0 && vidaBoss[nBoss]>0){
+        DrawText("INFELISMENTE, VOCÊ PERDEU! ;-;", 400, 150, 33, BLACK);
+    }else if(vida<=0 && vidaBoss[nBoss]<=0){
+        DrawText("PARABENS, VOCÊ EMPATOU!", 400, 150, 33, BLACK);
+    }
+    
     
     DrawText("Pressione Enter para voltar para a seleção de Bosses...", 300, 390, 25, GRAY);
 }
@@ -237,10 +249,12 @@ int main() {
     selectSound = LoadSound("./click.wav");
     bgMenu = LoadTexture("./Imagens/background.png");
     bg1 = LoadTexture("./Imagens/Mine3.png");
+    bg2 = LoadTexture("./Imagens/nether3.png");
     richas = LoadTexture("./Imagens/Richas2.png");
     chay = LoadTexture("./Imagens/Chay.png");
     CubePeng = LoadTexture("./Imagens/CubePeng.png");
     MatrixPeng = LoadTexture("./Imagens/PengMatrix.png");
+    blaze = LoadTexture("./Imagens/blaze.png");
 
     // Tocar música
     PlayMusicStream(music);
@@ -254,8 +268,10 @@ int main() {
     // Varíaveis controladoras de tela
     bool desenharMenu = true;  // Menu
     bool desenharInstrucoes = false; // Instruções
-    bool desenharBosses = false; // Bosses
+    bool desenharBosses = false; // Seleção de Bosses
     bool desenharBoss1 = false; // Boss 1
+    bool desenharBoss2 = false; // Boss2
+    bool desenharBoss3 = false; // Boss2
     
     // Laço de repetição
     while (!WindowShouldClose()) {
@@ -273,7 +289,7 @@ int main() {
                 PlaySound(selectSound);
             }
         } else 
-            if(desenharBoss1 && seuTurno && lutando){
+            if((desenharBoss1 || desenharBoss2 || desenharBoss3) && seuTurno && lutando){
                 if (IsKeyPressed(KEY_LEFT)) {
                 op -= 1;
                 PlaySound(selectSound);
@@ -298,7 +314,7 @@ int main() {
                 }
             }
         // Controle de limite (OP)
-        if(op2==0 && desenharBoss1){   // Add Boss2 e Boss3
+        if(op2==0 && (desenharBoss1 || desenharBoss2 || desenharBoss3)){  
             if (op < 1) op = 4;
             if (op > 4) op = 1; 
         }
@@ -410,9 +426,6 @@ int main() {
         }
 
 
-
-
-
         //CONTROLE DAS TELAS
         // Controle de tela do Menu
         if (desenharMenu) {
@@ -452,13 +465,34 @@ int main() {
             }
 
         
-             if (op == 1 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Boss 1
+            if (op == 1 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Boss 1
                 desenharBosses = false; // Sai da seleção de Bosses
                 desenharBoss1 = true; // Ativa a Boss Fight 1
                 PlaySound(selectSound);
                 enterPressionado = true; // Marca que Enter foi pressionado
                 seuTurno = true;      // Iniciar turno
                 lutando= true;  // Inicia estado de luta
+                op=1;
+            }
+            
+            if (op == 2 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Boss 1
+                desenharBosses = false; // Sai da seleção de Bosses
+                desenharBoss2 = true; // Ativa a Boss Fight 2
+                PlaySound(selectSound);
+                enterPressionado = true; // Marca que Enter foi pressionado
+                seuTurno = true;      // Iniciar turno
+                lutando= true;  // Inicia estado de luta
+                op=1;
+            }
+            
+            if (op == 3 && IsKeyPressed(KEY_ENTER) && !enterPressionado) { // Entrar Boss 1
+                desenharBosses = false; // Sai da seleção de Bosses
+                desenharBoss3 = true; // Ativa a Boss Fight 3
+                PlaySound(selectSound);
+                enterPressionado = true; // Marca que Enter foi pressionado
+                seuTurno = true;      // Iniciar turno
+                lutando= true;  // Inicia estado de luta
+                op=1;
             }
         }  
 
@@ -483,8 +517,34 @@ int main() {
         // Boss 1
         if (desenharBoss1) {
             DrawBoss1(bg1, richas, chay); // Desenha o Boss 1
+            nBoss=0;
+        }
+        // Boss 2
+        if (desenharBoss2) {
+            DrawBoss1(bg2, richas, blaze); // Desenha o Boss 2
+            nBoss=1;
+        }
+        // Boss 3
+        if (desenharBoss3) {
+            DrawBoss1(bg1, richas, CubePeng); // Desenha o Boss 3
+            nBoss=2;
+        }
 
-            // ataqueBosss do Boss 1
+        // (Boss1, Boss2, Boss3)
+        if(desenharBoss1 || desenharBoss2 || desenharBoss3){  
+            DrawHud ();               // HUD
+            DrawStatus();
+
+            if(seuTurno){
+                DrawHudActions(op);   // Ações do HUD
+                ataqueBoss=0;   // Reseta o dano de ataque do Boss
+                if(y==0){
+                    mana+=1;
+                    y+=1;
+                }
+            }
+            
+            // ataqueBosss do Boss 
             if(seuTurno==false){
                 if(x==0){
                     ataqBoss=rand()%3;
@@ -522,22 +582,8 @@ int main() {
                     x++;
                 }
             }
-        }
-
-        // (Boss1, Boss2, Boss3)
-        if(desenharBoss1){  //Adicionar Boss2 e Boss3 (depois)
-            DrawHud ();               // HUD
-            DrawStatus();
-
-            if(seuTurno){
-                DrawHudActions(op);   // Ações do HUD
-                ataqueBoss=0;   // Reseta o dano de ataque do Boss
-                if(y==0){
-                    mana+=1;
-                    y+=1;
-                }
-            }
             
+
             // Sinaliza ações ****  (Talvez trocar este+Controle de Telas para o Boss1)
             if(seuTurno==false){
                 if(mostrar==0){   // Seu Ataque
@@ -586,7 +632,7 @@ int main() {
                 }   
                 
                 // Desativa estado de luta ao morrer
-                if(desenharBoss1 && (vida<=0 || vidaBoss[nBoss]<=0) && fimFalas){  // Add Boss2 e Boss3
+                if((desenharBoss1 || desenharBoss2 || desenharBoss3) && (vida<=0 || vidaBoss[nBoss]<=0) && fimFalas){  
                     lutando=false;
                 }
             } // Seu Turno==false
@@ -608,7 +654,13 @@ int main() {
                             op2=3;  //Ações
                             break;
                         case 4:     //Correr
-                            desenharBoss1 = false; // Sai da Boss Fight 1
+                            if(desenharBoss1){
+                                desenharBoss1 = false; // Sai da Boss Fight 1
+                            }else if(desenharBoss2){
+                                desenharBoss2 = false; // Sai da Boss Fight 2
+                            }else if (desenharBoss3){
+                                desenharBoss3 = false; // Sai da Boss Fight 3
+                            }
                             desenharBosses = true; // Volta a seleção de Bosses
                             op=1;
                             break;
@@ -697,11 +749,22 @@ int main() {
             
         } //Desenhar Bosses
 
-        //Desenhar Win Screen
-        if(!lutando && desenharBoss1){ // Add Boss2 e Boss3
-            DrawWinScreen();
+        //Não Lutando e em BossFight
+        if(!lutando && (desenharBoss1 || desenharBoss2 || desenharBoss3)){ // Add Boss2 e Boss3
+            DrawWinScreen(); //Desenhar Win Screen
             op2=0;
             op=1;
+            
+            if(IsKeyPressed(KEY_ENTER) && !enterPressionado){
+                if(desenharBoss1){
+                    desenharBoss1=false;
+                }else if(desenharBoss2){
+                    desenharBoss2=false;
+                }else if(desenharBoss3){
+                    desenharBoss3=false;
+                }
+                desenharBosses=true;
+            }
         }
 
 

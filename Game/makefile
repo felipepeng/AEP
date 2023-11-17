@@ -13,4 +13,7 @@ zipa:
 debug:
 	gdb $$PROGRAMA.out  
 ray:
-	g++ $$PROGRAMA.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o $$PROGRAMA.out 
+	gcc $$PROGRAMA.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o $$PROGRAMA.out 
+rayexe:
+	make ray
+	make exe
