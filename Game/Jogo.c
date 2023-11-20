@@ -73,6 +73,9 @@ void DrawMenu(int op, Texture2D bgMenu) {
 
 // Função para desenhar as Instruções
 void DrawInstrucoes(int op) {
+    DrawRectangle(0, 0, 1280, 720, DARKPURPLE);
+    DrawRectangle(15, 15, 1250, 690, BLACK);
+
     DrawText("COMANDOS:"                           , 320, yInstrucoes-50 , 40       , PINK);
     DrawText("SETAS: seleciona as ações."          , 320, yInstrucoes    , FONT_SIZE, padrao);
     DrawText("ENTER: confirma uma ação."           , 320, yInstrucoes+40 , FONT_SIZE, padrao);
@@ -255,7 +258,6 @@ void DrawWinScreen(){
     }else if(vida<=0 && vidaBoss[nBoss]<=0){
         DrawText("PARABENS, VOCÊ EMPATOU!", 400, 150, 33, BLACK);
     }
-    
     
     DrawText("Pressione Enter para voltar para a seleção de Bosses...", 300, 390, 25, GRAY);
 }
