@@ -420,6 +420,10 @@ int main() {
             iMana = 0;
         }
         
+        if(mana>10){
+            mana=10;
+        }
+        
         //VIDA BOSS
         if (vidaBoss[nBoss] >= 150) {
             iVidaBoss = 10;
@@ -515,7 +519,6 @@ int main() {
                 op=1;
             }
         }  
-
         
     // Abrir desenho=================================================================================================
         BeginDrawing();
@@ -580,7 +583,7 @@ int main() {
                             
                         case 2: // HEAL
                         curaBoss= 1+rand()%10;
-                        vidaBoss[0]+=curaBoss;
+                        vidaBoss[nBoss]+=curaBoss;
                         break;
                         default:
                         break;
@@ -719,7 +722,7 @@ int main() {
                                 break;
                         }
                         mostrar=0;
-                        vidaBoss[0]-=seuAtaque;
+                        vidaBoss[nBoss]-=seuAtaque;
                         x=0; //Controlador Boss
                         enterPressionado = true; // Marca que Enter foi pressionado
                     }
