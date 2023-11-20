@@ -13,7 +13,7 @@ int xVida=25;
 int vida=100;
 int vidaBoss[3]= {150, 200, 300};
 int qntVidaBoss[3]= {150, 200, 300}; 
-int mana=4;
+int mana;
 int op2=0;
 int ataqBoss;
 int x=0, y=0;
@@ -425,25 +425,25 @@ int main() {
         }
         
         //VIDA BOSS
-        if (vidaBoss[nBoss] >= 150) {
+        if (vidaBoss[nBoss] >= qntVidaBoss[nBoss]) {
             iVidaBoss = 10;
-        } else if (vidaBoss[nBoss] < 150 && vidaBoss[nBoss] >= 135) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss] && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.9) {
             iVidaBoss = 9;
-        } else if (vidaBoss[nBoss] < 135 && vidaBoss[nBoss] >= 120) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.9 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.8) {
             iVidaBoss = 8;
-        } else if (vidaBoss[nBoss] < 120 && vidaBoss[nBoss] >= 105) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.8 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.7) {
             iVidaBoss = 7;
-        } else if (vidaBoss[nBoss] < 105 && vidaBoss[nBoss] >= 90) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.7 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.6) {
             iVidaBoss = 6;
-        } else if (vidaBoss[nBoss] < 90 && vidaBoss[nBoss] >= 75) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.6 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.5) {
             iVidaBoss = 5;
-        } else if (vidaBoss[nBoss] < 75 && vidaBoss[nBoss] >= 60) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.5 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.4) {
             iVidaBoss = 4;
-        } else if (vidaBoss[nBoss] < 60 && vidaBoss[nBoss] >= 45) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.4 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.3) {
             iVidaBoss = 3;
-        } else if (vidaBoss[nBoss] < 45 && vidaBoss[nBoss] >= 30) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.3 && vidaBoss[nBoss] >= qntVidaBoss[nBoss]*0.2) {
             iVidaBoss = 2;
-        } else if (vidaBoss[nBoss] < 30 && vidaBoss[nBoss] > 0) {
+        } else if (vidaBoss[nBoss] < qntVidaBoss[nBoss]*0.2 && vidaBoss[nBoss] > 0) {
             iVidaBoss = 1;
         } else if (vidaBoss[nBoss] <= 0) {
             iVidaBoss = 0;
@@ -518,6 +518,13 @@ int main() {
                 lutando= true;  // Inicia estado de luta
                 op=1;
             }
+
+            
+            vida=100;  //Regenera sua vida
+            mana=5;  //Regenera sua Mana
+            for(int i=0; i<3; i++){  //Regenera a vida dos 3 Bosses
+                vidaBoss[i]=150+50*i;
+            }
         }  
         
     // Abrir desenho=================================================================================================
@@ -562,7 +569,7 @@ int main() {
                 DrawHudActions(op);   // Ações do HUD
                 ataqueBoss=0;   // Reseta o dano de ataque do Boss
                 if(y==0){
-                    mana+=1;
+                    //Acrescimo de mana+
                     y+=1;
                 }
             }
